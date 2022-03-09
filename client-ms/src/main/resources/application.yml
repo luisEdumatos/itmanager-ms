@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob: 
+            non_contextual_creation: true
+      format_sql: ture        
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  
+  application:
+    name: client-ms
+    
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/clientms
+    username: postgres
+    password: 123456
+    
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
