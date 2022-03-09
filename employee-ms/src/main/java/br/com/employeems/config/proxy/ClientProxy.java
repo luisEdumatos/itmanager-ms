@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import br.com.employeems.module.employee.dto.ClientResponse;
 
-@FeignClient(name = "client-ms", url = "localhost:8080")
+@FeignClient(name = "client-ms")
 public interface ClientProxy {
 
 	@GetMapping(value = "/api/client/{id}")
