@@ -4,12 +4,20 @@ server:
 spring:
   application:
     name: api-gateway
-  #cloud:
-    #gateway:
-      #discovery:
-        #locator:
-          #enabled: true
-          #lower-case-service-id: true
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes: 
+      - id: /api/client
+        uri: lb://client-ms   
+        predicates:
+        - Path=/api/client/**
+      - id: /api/employee
+        uri: lb://employee-ms   
+        predicates:
+        - Path=/api/employee/**  
     
 eureka:
   client:

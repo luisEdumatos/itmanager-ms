@@ -22,8 +22,11 @@ import br.com.clientms.module.client.dto.ClientResponse;
 import br.com.clientms.module.client.service.ClientService;
 import br.com.clientms.util.exceptions.ClientNotFoundException;
 import br.com.clientms.util.response.Response;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
+@Tag(name = "Client endpoint")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/client")
@@ -32,27 +35,32 @@ public class ClientController {
 
     private ClientService clientService;
 
+    @Operation(summary = "Find all Clients")
     @GetMapping(produces = "application/json")
     public List<ClientResponse> listAll() {
         return clientService.listAll();
     }
 
+    @Operation(summary = "Find Client By ID")
     @GetMapping(value = "/{id}", produces = "application/json")
     public ClientResponse findById(@PathVariable Long id) throws ClientNotFoundException {
         return clientService.findById(id);
     }
 
+    @Operation(summary = "Create Client")
     @PostMapping(consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public Response createClient(@RequestBody @Valid ClientRequest request) {
         return clientService.createClient(request);
     }
 
+    @Operation(summary = "Update Client By ID")
     @PutMapping(value = "/{id}", produces = "application/json")
     public Response updateById(@PathVariable Long id, @RequestBody @Valid ClientRequest request) throws ClientNotFoundException {
         return clientService.updateById(id, request);
     }
-
+    
+    @Operation(summary = "Delete Client By ID")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Response deleteById(@PathVariable Long id) throws ClientNotFoundException {
