@@ -29,7 +29,7 @@ import lombok.AllArgsConstructor;
 @Tag(name = "Client endpoint")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/client")
+@RequestMapping("client-ms")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class ClientController {
 

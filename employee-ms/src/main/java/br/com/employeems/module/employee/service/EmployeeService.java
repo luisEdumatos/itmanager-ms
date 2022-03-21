@@ -77,7 +77,7 @@ public class EmployeeService {
         	var client = clientProxy.findById(clientID);
         	return client; 
         } catch (FeignException ex) {
-        	throw new ValidationException("Client not found.");
+        	throw new ValidationException("Client not found." + ex.getMessage());
         }
     }
     

@@ -9,6 +9,6 @@ import br.com.employeems.module.employee.dto.ClientResponse;
 @FeignClient(name = "client-ms")
 public interface ClientProxy {
 
-	@GetMapping(value = "/api/client/{id}")
+	@GetMapping(value = "/client-ms/{id}")
     public ClientResponse findById(@PathVariable Long id);
 }

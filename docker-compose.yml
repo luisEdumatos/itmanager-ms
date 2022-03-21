@@ -1,0 +1,93 @@
+version: '3.4'
+
+services:
+  naming-server:
+    image: luisedumatos/naming-server:0.0.1-SNAPSHOT
+    ports:
+      - 8761:8761
+    networks:
+      - itmanager-network
+  
+  api-gateway:
+    image: luisedumatos/api-gateway:0.0.1-SNAPSHOT
+    ports:
+      - 8765:8765
+    depends_on:
+      - naming-server
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka    
+    networks:
+      - itmanager-network
+  
+  client-db:
+    image: postgres:11
+    container_name: client-db
+    restart: always
+    environment:
+      - POSTGRES_DB=clientms
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123456
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    networks:
+      - itmanager-network
+  
+  employee-db:
+    image: postgres:11
+    container_name: employee-db
+    restart: always
+    environment:
+      - POSTGRES_DB=employeems
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123456
+    ports:
+      - 5433:5433
+    expose:
+      - 5433
+    command: -p 5433  
+    networks:
+      - itmanager-network
+  
+  client-ms:
+    image: luisedumatos/client-ms
+    restart: always
+    build:
+      context: .
+      dockerfile: client-ms/Dockerfile
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+      SPRING.DATASOURCE.URL: jdbc:postgresql://client-db:5432/clientms?useSSL=false&serverTimezone=UTC&enabledTLSProtocols=TLSv1.2
+      SPRING.DATASOURCE.USERNAME: admin
+      SPRING.DATASOURCE.PASSWORD: 123456
+    ports:
+      - 8000:8000
+    depends_on:
+      - naming-server
+      - client-db
+    networks:
+      - itmanager-network   
+      
+  employee-ms:
+    image: luisedumatos/employee-ms
+    restart: always
+    build:
+      context: .
+      dockerfile: employee-ms/Dockerfile
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+      SPRING.DATASOURCE.URL: jdbc:postgresql://employee-db:5433/employeems?useSSL=false&serverTimezone=UTC&enabledTLSProtocols=TLSv1.2
+      SPRING.DATASOURCE.USERNAME: admin
+      SPRING.DATASOURCE.PASSWORD: 123456
+    ports:
+      - 8001:8001
+    depends_on:
+      - naming-server
+      - employee-db
+    networks:
+      - itmanager-network         
+         
+networks:
+  itmanager-network:
+    driver: bridge

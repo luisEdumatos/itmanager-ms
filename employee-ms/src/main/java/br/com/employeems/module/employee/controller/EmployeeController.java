@@ -29,7 +29,7 @@ import lombok.AllArgsConstructor;
 @Tag(name = "Employee endpoint")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/employee")
+@RequestMapping("/employee-ms")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class EmployeeController {
 
